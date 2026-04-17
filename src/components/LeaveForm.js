@@ -1,0 +1,291 @@
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  TextField,
+  Typography,
+  MenuItem,
+  Avatar,
+  Stack
+} from "@mui/material";
+
+import WorkIcon from "@mui/icons-material/Work";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { addLeaveDataActionInitiate } from "../redux/actions/addLeaveAction";
+import { updateLeaveDataActionInitiate } from "../redux/actions/updateLeaveAction";
+import { getLeaveDataActionInitiate } from "../redux/actions/getLeaveAction";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import Colors from "../colors";
+import { Theme } from "../GlobalStyles";
+
+function LeaveForm() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const initialLeave = {
+    employeename: "",
+    email: "",
+    leaveType: "",
+    fromDate: "",
+    toDate: "",
+    reason: "",
+    profileImage: "",
+    status: "pending"
+  };
+
+  const [leave, setLeave] = useState(initialLeave);
+  const [errors, setErrors] = useState({});
+  const [type] = useState("add");
+
+  useEffect(() => {
+    dispatch(getLeaveDataActionInitiate());
+
+    const email = localStorage.getItem("email");
+
+    const fetchEmployee = async () => {
+      const res = await fetch(
+        "https://redux-portal-default-rtdb.firebaseio.com/Employee.json"
+      );
+      const data = await res.json();
+
+      const employees = Object.values(data || {});
+      const user = employees.find((emp) => emp.email === email);
+
+      if (user) {
+        setLeave((prev) => ({
+          ...prev,
+          employeename: user.employeename,
+          email: user.email,
+          profileImage: user.profileImage
+        }));
+      }
+    };
+
+    fetchEmployee();
+  }, [dispatch]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setLeave({
+      ...leave,
+      [name]: value
+    });
+
+    setErrors({
+      ...errors,
+      [name]: ""
+    });
+  };
+
+  const validate = () => {
+    let newErrors = {};
+    let valid = true;
+
+    if (!leave.leaveType) {
+      newErrors.leaveType = "Select leave type";
+      valid = false;
+    }
+
+    if (!leave.fromDate) {
+      newErrors.fromDate = "Select from date";
+      valid = false;
+    }
+
+    if (!leave.toDate) {
+      newErrors.toDate = "Select to date";
+      valid = false;
+    }
+
+    if (leave.fromDate && leave.toDate && leave.fromDate > leave.toDate) {
+      newErrors.toDate = "To date must be after From date";
+      valid = false;
+    }
+
+    if (!leave.reason.trim()) {
+      newErrors.reason = "Reason is required";
+      valid = false;
+    }
+
+    setErrors(newErrors);
+    return valid;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (validate()) {
+      await dispatch(addLeaveDataActionInitiate(leave));
+      toast.success("Leave added successfully!");
+
+      setLeave(initialLeave);
+      navigate("/employee-dashboard");
+    }
+  };
+
+  // ✅ IMAGE HANDLE (SAFE)
+  const handleImageChange = (e) => {
+    if (!e || !e.target || !e.target.files) return;
+
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.type !== "image/jpeg" && file.type !== "image/png") {
+      toast.error("Only JPG and PNG images are allowed");
+      return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error("Image must be less than 2MB");
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      handleChange({
+        target: {
+          name: "profileImage",
+          value: reader.result
+        }
+      });
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  return (
+    <Box
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        background: Colors.background
+      }}
+    >
+      <Card
+        sx={{
+          width: 340,
+          borderRadius: 4,
+          background: Colors.white,
+          boxShadow: "0px 8px 25px rgba(0,0,0,0.8)",
+          p: 2
+        }}
+      >
+        <CardContent>
+          <Stack alignItems="center" spacing={1} mb={2}>
+            <Avatar
+              sx={{
+                width: 45,
+                height: 45,
+                background: Colors.blue
+              }}
+            >
+              <WorkIcon fontSize="small" />
+            </Avatar>
+
+            <Typography sx={{ fontSize: Theme.font20Bold, color: Colors.headings }}>
+              Apply Leave
+            </Typography>
+          </Stack>
+
+          <form onSubmit={handleSubmit}>
+            <TextField
+              size="small"
+              label="Name"
+              value={leave.employeename}
+              fullWidth
+              disabled
+              sx={{ mb: 1 }}
+            />
+
+            <TextField
+              size="small"
+              label="Email"
+              value={leave.email}
+              fullWidth
+              disabled
+              sx={{ mb: 1.5 }}
+            />
+
+            <TextField
+              select
+              size="small"
+              label="Leave Type"
+              name="leaveType"
+              fullWidth
+              value={leave.leaveType}
+              onChange={handleChange}
+              error={!!errors.leaveType}
+              helperText={errors.leaveType}
+              sx={{ mb: 1.5 }}
+            >
+              <MenuItem value="Casual">Casual</MenuItem>
+              <MenuItem value="Sick">Sick</MenuItem>
+              <MenuItem value="Emergency">Emergency</MenuItem>
+            </TextField>
+
+            <Box sx={{ display: "flex", gap: 1 }}>
+              <TextField
+                size="small"
+                type="date"
+                name="fromDate"
+                fullWidth
+                value={leave.fromDate}
+                onChange={handleChange}
+                error={!!errors.fromDate}
+                helperText={errors.fromDate}
+              />
+              <TextField
+                size="small"
+                type="date"
+                name="toDate"
+                fullWidth
+                value={leave.toDate}
+                onChange={handleChange}
+                error={!!errors.toDate}
+                helperText={errors.toDate}
+              />
+            </Box>
+
+            <TextField
+              size="small"
+              label="Reason"
+              name="reason"
+              fullWidth
+              multiline
+              rows={2}
+              value={leave.reason}
+              onChange={handleChange}
+              error={!!errors.reason}
+              helperText={errors.reason}
+              sx={{ mt: 1.5 }}
+            />
+
+           
+            <Box sx={{ display: "flex", gap: 1, mt: 2 }}>
+              <Button
+                type="button"
+                fullWidth
+                variant="outlined"
+                onClick={() => navigate("/employee")}
+              >
+                Back
+              </Button>
+
+              <Button type="submit" fullWidth variant="contained">
+                Submit
+              </Button>
+            </Box>
+          </form>
+        </CardContent>
+      </Card>
+    </Box>
+  );
+}
+
+export default LeaveForm;
