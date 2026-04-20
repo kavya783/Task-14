@@ -17,7 +17,10 @@ export default function EmployeeTable({
     handleEdit,
     handleDelete,
     handleAdd,
-    handleView
+    handleView,
+     page,
+    rowsPerPage
+     
 }) {
 
     const isMobile = useMediaQuery("(max-width:500px)");
@@ -135,7 +138,7 @@ export default function EmployeeTable({
                                     <TableRow key={item.id}>
 
                                         <TableCell align="center">
-                                            {index + 1}
+                                          {page * rowsPerPage + index + 1}
                                         </TableCell>
 
 

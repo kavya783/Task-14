@@ -7,7 +7,7 @@ const Colors={
     red:"#EB4C4C",
    view:"#9AD872",
     white: "#ffff",
-    black:"#040000",
+    black:"#030400",
     background:"#EDFFF0",
    
     

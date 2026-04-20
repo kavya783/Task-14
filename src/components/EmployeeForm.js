@@ -7,11 +7,11 @@ import {
   TextField,
   MenuItem,
   Box,
-  
 } from "@mui/material";
 import Colors from "../colors";
 import CommonButton from "./CommonButton";
 import { toast } from "react-toastify";
+import bcrypt from "bcryptjs";
 
 export default function EmployeeForm({
   employee,
@@ -23,19 +23,16 @@ export default function EmployeeForm({
 }) {
   const [errors, setErrors] = useState({});
 
-
   const handleInputChange = (e) => {
-    const { name,value } = e.target;
+    const { name } = e.target;
 
     handleChange(e);
 
-    // only that field error clear
     setErrors((prev) => ({
       ...prev,
       [name]: ""
     }));
   };
-
 
   const validate = () => {
     let newErrors = {};
@@ -67,15 +64,26 @@ export default function EmployeeForm({
   };
 
  
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (validate()) {
-      submitHandle();
+      const saltRounds = 10;
+
+      const hashedPassword = await bcrypt.hash(
+        employee.password,
+        saltRounds
+      );
+
+      const updatedEmployee = {
+        ...employee,
+        password: hashedPassword
+      };
+
+      submitHandle(updatedEmployee);
     }
   };
 
- 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -113,7 +121,7 @@ export default function EmployeeForm({
 
   return (
     <Dialog open={show} onClose={handleClose} fullWidth maxWidth="sm">
-      <DialogTitle sx={{color:Colors.navbar}}>
+      <DialogTitle sx={{ color: Colors.navbar }}>
         {type === "add"
           ? "Add Employee"
           : type === "edit"
@@ -195,30 +203,25 @@ export default function EmployeeForm({
             helperText={errors.password}
           />
 
-       
-<Box sx={{ mt: 2 }}>
-  <CommonButton
-  variant="contained"
-  component="label"
-  
-  sx={{
-    mt: 2,
-    textTransform: "none",
-    borderRadius: 2,
-    background: Colors.blue,
-    fontWeight: "bold"
-  }}
->
-  Upload Profile Image
-  <input
-    type="file"
-    hidden
-    accept="image/png, image/jpeg"
-    onChange={handleImageChange}
-  />
-</CommonButton>
-</Box>
-
+          <Box sx={{ mt: 2 }}>
+            <CommonButton
+              variant="contained"
+              component="label"
+              sx={{
+                textTransform: "none",
+                borderRadius: 2,
+                background: Colors.blue,
+              }}
+            >
+              Upload Image
+              <input
+                type="file"
+                hidden
+                accept="image/png, image/jpeg"
+                onChange={handleImageChange}
+              />
+            </CommonButton>
+          </Box>
 
           {errors.profileImage && (
             <p style={{ color: "red", fontSize: "12px" }}>
@@ -228,32 +231,36 @@ export default function EmployeeForm({
 
           {employee.profileImage && (
             <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-  <Box
-    component="img"
-    src={employee.profileImage}
-    alt="preview"
-    sx={{
-      width: 90,
-      height: 90,
-      borderRadius: "50%",
-      objectFit: "cover",
-      border: `2px solid ${Colors.blue}`
-    }}
-  />
-</Box>
+              <img
+                src={employee.profileImage}
+                alt="preview"
+                style={{
+                  width: 80,
+                  height: 80,
+                  borderRadius: "50%"
+                }}
+              />
+            </Box>
           )}
 
           <DialogActions>
-            <CommonButton onClick={handleClose} sx={{ backgroundColor: Colors.view, color: Colors.black}}>
+            <CommonButton
+              onClick={handleClose}
+              sx={{ backgroundColor: Colors.view }}
+            >
               Cancel
             </CommonButton>
 
             {type !== "view" && (
-              <CommonButton type="submit"sx={{ backgroundColor: Colors.blue, color: Colors.black}}>
+              <CommonButton
+                type="submit"
+                sx={{ backgroundColor: Colors.blue }}
+              >
                 {type === "add" ? "Add Employee" : "Update Employee"}
               </CommonButton>
             )}
           </DialogActions>
+
         </form>
       </DialogContent>
     </Dialog>

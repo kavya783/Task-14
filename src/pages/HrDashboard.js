@@ -50,62 +50,61 @@ function HrDashboard() {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const isMobile = useMediaQuery("(max-width:600px)");
-     const [loading, setLoading] = useState(true);
-   
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
         getAllEmployees();
     }, []);
-      
+
     const getAllEmployees = async () => {
-    try {
-        setLoading(true);   // start loader
-        await dispatch(getEmployeeDataActionInitiate());
-    } catch (error) {
-        console.log("error", error);
-    } finally {
-        setLoading(false); 
-    }
-};
+        try {
+            setLoading(true);   // start loader
+            await dispatch(getEmployeeDataActionInitiate());
+        } catch (error) {
+            console.log("error", error);
+        } finally {
+            setLoading(false);
+        }
+    };
     const handleClose = () => {
         setShow(false);
-         setemployee(initialEmployee);
+        setemployee(initialEmployee);
     };
-  const submitHandle = async () => {
-    try {
-        setLoading(true);
-        if (type === "add") {
-            await dispatch(addEmployeeDataActionInitiate(employee));
-            toast.success("employee added successfully!");
-        } else if (type === "edit") {
-            await dispatch(updateEmployeeDataActionInitiate(employee, employee.id));
-            toast.success("employee updated successfully!");
+    const submitHandle = async (data) => {
+        try {
+            setLoading(true);
+
+            if (type === "add") {
+                await dispatch(addEmployeeDataActionInitiate(data));
+            } else if (type === "edit") {
+                await dispatch(updateEmployeeDataActionInitiate(data, data.id));
+            }
+
+            await getAllEmployees();
+            handleClose();
+        } finally {
+            setLoading(false);
         }
-        await getAllEmployees();
-        handleClose();
-    } finally {
-        setLoading(false);
-    }
-};
+    };
 
 
-
-  const handleDelete = async (id) => {
-    try {
-        setLoading(true);
-        await dispatch(deleteEmployeeDataActionInitiate(id));
-        await getAllEmployees();
-        toast.success("Employee deleted successfully!");
-    } finally {
-        setLoading(false);
-    }
-};
+    const handleDelete = async (id) => {
+        try {
+            setLoading(true);
+            await dispatch(deleteEmployeeDataActionInitiate(id));
+            await getAllEmployees();
+            toast.success("Employee deleted successfully!");
+        } finally {
+            setLoading(false);
+        }
+    };
     const handleChange = (e) => {
         const { name, value } = e.target;
-         setemployee({ ...employee, [name]: value });
+        setemployee({ ...employee, [name]: value });
     };
     const handleAdd = () => {
         setType("add");
-         setemployee(initialEmployee);
+        setemployee(initialEmployee);
         setShow(true);
     };
 
@@ -133,17 +132,17 @@ function HrDashboard() {
         page * rowsPerPage,
         page * rowsPerPage + rowsPerPage
     );
-console.log("DATA FROM REDUX ", data);
-  if (loading) return <Loader />;
+    console.log("DATA FROM REDUX ", data);
+    if (loading) return <Loader />;
 
     return (
 
         <>
-          <AppBarr roled="hr" />
-          <NavBar/>
-          
-            
-            <Box sx={{ padding: 2,background:Colors.background,height:695, }}>
+            <AppBarr roled="hr" />
+            <NavBar />
+
+
+            <Box sx={{ padding: 2, background: Colors.background, height: 695, }}>
                 {type === "view" && (
                     <Dialog open={show} onClose={handleClose}>
                         <DialogTitle sx={{ color: Colors.red }}>Employee Details</DialogTitle>
@@ -160,50 +159,50 @@ console.log("DATA FROM REDUX ", data);
                             }}
                         >
                             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <Typography sx={{ fontSize: Theme.font14Bold, color: Colors.black }}>
-                      <b>Name:</b>
-                    </Typography>
+                                <Typography sx={{ fontSize: Theme.font14Bold, color: Colors.black }}>
+                                    <b>Name:</b>
+                                </Typography>
 
-                    <Typography sx={{ fontSize: Theme.font16SemiBold, color: Colors.blue }}>
-                      {employee.employeename}
-                    </Typography>
-                  </Box>
-                           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <Typography sx={{ fontSize: Theme.font14Bold, color: Colors.black }}>
-                      <b>Role:</b>
-                    </Typography>
-
-                    <Typography sx={{ fontSize: Theme.font16SemiBold, color: Colors.blue }}>
-                      {employee.role}
-                    </Typography>
-                  </Box>
+                                <Typography sx={{ fontSize: Theme.font16SemiBold, color: Colors.blue }}>
+                                    {employee.employeename}
+                                </Typography>
+                            </Box>
                             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <Typography sx={{ fontSize: Theme.font14Bold, color: Colors.black }}>
-                      <b>Salary:</b>
-                    </Typography>
+                                <Typography sx={{ fontSize: Theme.font14Bold, color: Colors.black }}>
+                                    <b>Role:</b>
+                                </Typography>
 
-                    <Typography sx={{ fontSize: Theme.font16SemiBold, color: Colors.blue }}>
-                      {employee.salary}
-                    </Typography>
-                  </Box>
+                                <Typography sx={{ fontSize: Theme.font16SemiBold, color: Colors.blue }}>
+                                    {employee.role}
+                                </Typography>
+                            </Box>
                             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <Typography sx={{ fontSize: Theme.font14Bold, color: Colors.black }}>
-                      <b>Address:</b>
-                    </Typography>
+                                <Typography sx={{ fontSize: Theme.font14Bold, color: Colors.black }}>
+                                    <b>Salary:</b>
+                                </Typography>
 
-                    <Typography sx={{ fontSize: Theme.font16SemiBold, color: Colors.blue }}>
-                      {employee.address}
-                    </Typography>
-                  </Box>
+                                <Typography sx={{ fontSize: Theme.font16SemiBold, color: Colors.blue }}>
+                                    {employee.salary}
+                                </Typography>
+                            </Box>
                             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <Typography sx={{ fontSize: Theme.font14Bold, color: Colors.black }}>
-                      <b>Email:</b>
-                    </Typography>
+                                <Typography sx={{ fontSize: Theme.font14Bold, color: Colors.black }}>
+                                    <b>Address:</b>
+                                </Typography>
 
-                    <Typography sx={{ fontSize: Theme.font16SemiBold, color: Colors.blue }}>
-                      {employee.email}
-                    </Typography>
-                  </Box>
+                                <Typography sx={{ fontSize: Theme.font16SemiBold, color: Colors.blue }}>
+                                    {employee.address}
+                                </Typography>
+                            </Box>
+                            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                                <Typography sx={{ fontSize: Theme.font14Bold, color: Colors.black }}>
+                                    <b>Email:</b>
+                                </Typography>
+
+                                <Typography sx={{ fontSize: Theme.font16SemiBold, color: Colors.blue }}>
+                                    {employee.email}
+                                </Typography>
+                            </Box>
                         </DialogContent>
                         <DialogActions>
                             <CommonButton
@@ -228,15 +227,15 @@ console.log("DATA FROM REDUX ", data);
                     />
                 )}
 
-                <EmployeeTable
-                    data={paginatedProducts}
-                    handleEdit={handleEdit}
-                    handleDelete={handleDelete}
-                    handleAdd={handleAdd}
-                    handleView={handleView}
-
-                />
-
+               <EmployeeTable
+  data={paginatedProducts}
+  handleEdit={handleEdit}
+  handleDelete={handleDelete}
+  handleAdd={handleAdd}
+  handleView={handleView}
+  page={page}
+  rowsPerPage={rowsPerPage}
+/>
                 <TablePagination
                     component="div"
                     count={data.length}

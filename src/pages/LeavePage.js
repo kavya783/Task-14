@@ -126,7 +126,7 @@ function LeavePage() {
                             }}
                         >
                              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <Typography sx={{ fontSize: Theme.font14Bold, color: Colors.black }}>
+                    <Typography sx={{ fontSize:Theme.font14Bold, color: Colors.black }}>
                       <b>Name:</b>
                     </Typography>
 

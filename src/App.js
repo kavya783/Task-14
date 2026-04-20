@@ -14,6 +14,7 @@ import EmployeeLeave from "./components/EmployeeLeave";
 function App() {
   return (
     <Provider store={store}>
+      
       <BrowserRouter>
         <Routes>
 
