@@ -12,12 +12,10 @@ import {
 import Colors from "../colors";
 import CommonButton from "./CommonButton";
 import { toast } from "react-toastify";
+
 import { hashPassword } from "./HashPassword";
 
-
-export default function EmployeeForm({
-  darkMode,
-  setDarkMode,
+export default function EmployeeForm({ darkMode, setDarkMode,
   employee,
   handleChange,
   submitHandle,
@@ -45,6 +43,9 @@ export default function EmployeeForm({
 
     if (!employee.employeename)
       newErrors.employeename = "Name is required";
+    // } else if (employee.employeename.length >= 15) {
+    //   newErrors.employeename = "Name must be 1 to 15  letters  only";
+    // }
 
     if (!employee.role)
       newErrors.role = "Role is required";
@@ -70,8 +71,7 @@ export default function EmployeeForm({
   };
 
 
-
-const handleSubmit = async (e) => {
+ const handleSubmit = async (e) => {
   e.preventDefault();
 
   if (validate()) {
@@ -86,6 +86,7 @@ const handleSubmit = async (e) => {
     submitHandle(updatedEmployee);
   }
 };
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -150,6 +151,15 @@ const handleSubmit = async (e) => {
             margin="dense"
             error={!!errors.employeename}
             helperText={errors.employeename}
+            sx={{
+              input: { color: color.text },
+              label: { color: color.text },
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": { borderColor: color.text },
+                "&:hover fieldset": { borderColor: color.text },
+                "&.Mui-focused fieldset": { borderColor: color.navbar },
+              }
+            }}
           />
 
           <TextField
@@ -162,9 +172,62 @@ const handleSubmit = async (e) => {
             margin="dense"
             error={!!errors.role}
             helperText={errors.role}
+            sx={{
+              "& .MuiInputLabel-root": {
+                color: color.text
+              },
+              "& .MuiInputLabel-root.Mui-focused": {
+                color: color.navbar
+              },
+              "& .MuiSelect-select": {
+                color: color.text
+              },
+              "& .MuiSvgIcon-root": {
+                color: color.text
+              },
+              "& .MuiOutlinedInput-root": {
+                color: color.text,  // important
+                "& fieldset": { borderColor: color.text },
+                "&:hover fieldset": { borderColor: color.text },
+                "&.Mui-focused fieldset": { borderColor: color.navbar }
+              }
+            }}
           >
-            <MenuItem value="HR">HR</MenuItem>
-            <MenuItem value="Employee">Employee</MenuItem>
+
+
+            <MenuItem
+              value="HR"
+              sx={{
+                backgroundColor: color.background,
+                color: color.text,
+                "&.Mui-selected": {
+                  backgroundColor: color.background,
+                  color: color.text
+                },
+                "&.Mui-selected:hover": {
+                  backgroundColor: color.background
+                }
+              }}
+            >
+              HR
+            </MenuItem>
+
+            <MenuItem
+              value="Employee"
+              sx={{
+                backgroundColor: color.background,
+                color: color.text,
+                "&.Mui-selected": {
+                  backgroundColor: color.background,
+                  color: color.text
+                },
+                "&.Mui-selected:hover": {
+                  backgroundColor: color.background
+                }
+              }}
+            >
+              Employee
+            </MenuItem>
           </TextField>
 
           <TextField
@@ -176,7 +239,18 @@ const handleSubmit = async (e) => {
             margin="dense"
             error={!!errors.salary}
             helperText={errors.salary}
+            sx={{
+              input: { color: color.text },
+              label: { color: color.text },
+
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": { borderColor: color.text },
+                "&:hover fieldset": { borderColor: color.text },
+                "&.Mui-focused fieldset": { borderColor: color.navbar },
+              }
+            }}
           />
+
 
           <TextField
             label="Address"
@@ -187,8 +261,16 @@ const handleSubmit = async (e) => {
             margin="dense"
             error={!!errors.address}
             helperText={errors.address}
+            sx={{
+              input: { color: color.text },
+              label: { color: color.text },
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": { borderColor: color.text },
+                "&:hover fieldset": { borderColor: color.text },
+                "&.Mui-focused fieldset": { borderColor: color.navbar },
+              }
+            }}
           />
-
           <TextField
             label="Email"
             name="email"
@@ -198,6 +280,15 @@ const handleSubmit = async (e) => {
             margin="dense"
             error={!!errors.email}
             helperText={errors.email}
+            sx={{
+              input: { color: color.text },
+              label: { color: color.text },
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": { borderColor: color.text },
+                "&:hover fieldset": { borderColor: color.text },
+                "&.Mui-focused fieldset": { borderColor: color.navbar },
+              }
+            }}
           />
 
           <TextField
@@ -210,8 +301,16 @@ const handleSubmit = async (e) => {
             margin="dense"
             error={!!errors.password}
             helperText={errors.password}
+            sx={{
+              input: { color: color.text },
+              label: { color: color.text },
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": { borderColor: color.text },
+                "&:hover fieldset": { borderColor: color.text },
+                "&.Mui-focused fieldset": { borderColor: color.navbar },
+              }
+            }}
           />
-
           <Box sx={{ mt: 2 }}>
             <CommonButton
               variant="contained"
@@ -254,12 +353,18 @@ const handleSubmit = async (e) => {
           )}
 
           <DialogActions>
-            <CommonButton onClick={handleClose}>
+            <CommonButton
+              onClick={handleClose}
+              sx={{ backgroundColor: color.background, color: color.text }}
+            >
               Cancel
             </CommonButton>
 
             {type !== "view" && (
-              <CommonButton type="submit">
+              <CommonButton
+                type="submit"
+                sx={{ backgroundColor: color.navbar, color: color.headings }}
+              >
                 {type === "add" ? "Add Employee" : "Update Employee"}
               </CommonButton>
             )}
