@@ -11,9 +11,11 @@ import Colors from "../colors";
 import { Theme } from "../GlobalStyles";
 import Loader from "../components/Loader";
 
-function EmployeeDashboard() {
+function EmployeeDashboard({ darkMode, setDarkMode }) {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
+  
+  const color = Colors(darkMode);
 
   const leaveData =
     useSelector((state) => state.getleavereducer?.data) || [];
@@ -53,13 +55,17 @@ function EmployeeDashboard() {
 
   return (
     <>
-      <AppBarr roled="employee" />
-      <NavBar />
+      <AppBarr roled="employee"
+       darkMode={darkMode} 
+        setDarkMode={setDarkMode}  />
+      <NavBar
+       darkMode={darkMode} 
+        setDarkMode={setDarkMode}  />
 
 
       <Box
         sx={{
-          bgcolor: Colors.background,
+          bgcolor:color.background,
 
           display: "flex",
           justifyContent: "center",
@@ -100,17 +106,17 @@ function EmployeeDashboard() {
               <Card
                 sx={{
                   borderRadius: 5,
-                  background:Colors.background,
-                  backdropFilter: "blur(12px)",
+               
+                  
                   color: Colors.white,
-                  boxShadow: "0px 6px 20px rgba(0,0,0,0.2)",
+                  boxShadow: "0px 6px 15px rgba(0,0,0,0.1)",
                   p: 1,
                   mb: 5,
                 }}
               >
                 <CardContent>
 
-                  <Typography sx={{ fontSize: Theme.font16Bold, color: Colors.red, ml: 5 }} mb={1}>
+                  <Typography sx={{ fontSize: Theme.font16Bold, color: Colors.navbar, ml: 5 }} mb={1}>
                     Latest Leave
                   </Typography>
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -118,7 +124,7 @@ function EmployeeDashboard() {
                       <b>LeaveType:</b>
                     </Typography>
 
-                    <Typography sx={{ fontSize: Theme.font16SemiBold, color: Colors.blue }}>
+                    <Typography sx={{ fontSize: Theme.font16SemiBold, color: Colors.black }}>
                       {latestLeave.leaveType}
                     </Typography>
                   </Box>
@@ -129,7 +135,7 @@ function EmployeeDashboard() {
                       <b>FromDate:</b>
                     </Typography>
 
-                    <Typography sx={{ fontSize: Theme.font16SemiBold, color: Colors.blue }}>
+                    <Typography sx={{ fontSize: Theme.font16SemiBold, color: Colors.black }}>
                       {latestLeave.fromDate}
                     </Typography>
                   </Box>
@@ -139,7 +145,7 @@ function EmployeeDashboard() {
                       <b>ToDate:</b>
                     </Typography>
 
-                    <Typography sx={{ fontSize: Theme.font16SemiBold, color: Colors.blue }}>
+                    <Typography sx={{ fontSize: Theme.font16SemiBold, color: Colors.black }}>
                       {latestLeave.toDate}
                     </Typography>
                   </Box>
@@ -148,7 +154,7 @@ function EmployeeDashboard() {
                     <b>Status:{" "}</b>
                     <span
                       style={{
-                        color: "#ffd633",
+                        color:Colors.headings,
                         fontWeight: "bold"
                       }}
                     >

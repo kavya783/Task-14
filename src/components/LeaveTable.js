@@ -13,10 +13,13 @@ import { getLeaveDataActionInitiate } from "../redux/actions/getLeaveAction";
 import { updateLeaveDataActionInitiate } from "../redux/actions/updateLeaveAction";
 import { toast } from "react-toastify";
 
-export default function LeaveTable({ data = [], handleView, page, rowsPerPage }) {
+export default function LeaveTable({ data = [], handleView, page, rowsPerPage, darkMode }) {
 
   const isMobile = useMediaQuery("(max-width:600px)");
   const dispatch = useDispatch();
+
+
+  const color = Colors(darkMode);
 
   useEffect(() => {
     dispatch(getLeaveDataActionInitiate());
@@ -34,7 +37,7 @@ export default function LeaveTable({ data = [], handleView, page, rowsPerPage })
   return (
     <>
       <Typography sx={{
-        color: Colors.red,
+        color: color.text,
         fontSize: Theme.font20Bold,
         mt: 10,
         ml: { md: "25%", lg: "20%" }
@@ -45,7 +48,15 @@ export default function LeaveTable({ data = [], handleView, page, rowsPerPage })
       {isMobile ? (
         <Box>
           {data.map((item) => (
-            <Card key={item.id} sx={{ mb: 2, boxShadow: 3 }}>
+            <Card
+              key={item.id}
+              sx={{
+                mb: 2,
+                boxShadow: 3,
+                mt: 3,
+                backgroundColor: color.background  
+              }}
+            >
               <CardContent>
 
                 <Box sx={{ textAlign: "center", mb: 1 }}>
@@ -60,60 +71,70 @@ export default function LeaveTable({ data = [], handleView, page, rowsPerPage })
                   />
                 </Box>
 
-                <Typography><b>Name:</b> {item.employeename}</Typography>
-                <Typography><b>Type:</b> {item.leaveType}</Typography>
-                <Typography><b>From:</b> {item.fromDate}</Typography>
-                <Typography><b>To:</b> {item.toDate}</Typography>
+                <Typography sx={{ color: color.text }}>
+                  <b>Name:</b> {item.employeename}
+                </Typography>
 
-                <Typography>
+                <Typography sx={{ color: color.text }}>
+                  <b>Type:</b> {item.leaveType}
+                </Typography>
+
+                <Typography sx={{ color: color.text }}>
+                  <b>From:</b> {item.fromDate}
+                </Typography>
+
+                <Typography sx={{ color: color.text }}>
+                  <b>To:</b> {item.toDate}
+                </Typography>
+
+                <Typography sx={{ color: color.text }}>
                   <b>Status:</b>{" "}
                   <span style={{
                     color:
                       item.status === "approved"
-                        ? "green"
+                        ? color.navbar
                         : item.status === "rejected"
-                          ? "red"
-                          : "orange"
+                          ? color.headings
+                          : color.text
                   }}>
                     {item.status || "pending"}
                   </span>
                 </Typography>
 
                 <Box sx={{ display: "flex", gap: 1, mt: 2, flexWrap: "wrap" }}>
-                  
-                  <CommonButton onClick={() => handleView(item)}>
+
+                  <CommonButton
+                    onClick={() => handleView(item)}
+                    sx={{
+                      backgroundColor: color.headings,
+                      color: color.text,
+                      fontSize: Theme.font14Bold,
+                    }}
+                  >
                     View
                   </CommonButton>
 
-                  {/* APPROVE */}
-                  {item.status === "approved" ? (
-                    <CommonButton disabled sx={{ background: "green", color: "white" }}>
-                      Approved
-                    </CommonButton>
-                  ) : (
-                    <CommonButton
-                      sx={{ background: Colors.blue, color: "white" }}
-                      disabled={item.status === "rejected"}
-                      onClick={() => handleStatus(item, "approved")}
-                    >
-                      Approve
-                    </CommonButton>
-                  )}
+                  <CommonButton
+                    sx={{
+                      backgroundColor: item.status === "approved" ? color.navbar : color.background,
+                      color: color.text,
+                      fontSize: Theme.font14Bold
+                    }}
+                    onClick={() => handleStatus(item, "approved")}
+                  >
+                    {item.status === "approved" ? "Approved" : "Approve"}
+                  </CommonButton>
 
-                  {/* REJECT */}
-                  {item.status === "rejected" ? (
-                    <CommonButton disabled sx={{ background: Colors.red, color: "white" }}>
-                      Rejected
-                    </CommonButton>
-                  ) : (
-                    <CommonButton
-                      sx={{ background: Colors.red, color: "white" }}
-                      disabled={item.status === "approved"}
-                      onClick={() => handleStatus(item, "rejected")}
-                    >
-                      Reject
-                    </CommonButton>
-                  )}
+                  <CommonButton
+                    sx={{
+                      backgroundColor: item.status === "rejected" ? color.navbar : color.background,
+                      color: color.text,
+                      fontSize: Theme.font14Bold
+                    }}
+                    onClick={() => handleStatus(item, "rejected")}
+                  >
+                    {item.status === "rejected" ? "Rejected" : "Reject"}
+                  </CommonButton>
 
                 </Box>
 
@@ -129,18 +150,18 @@ export default function LeaveTable({ data = [], handleView, page, rowsPerPage })
           width: { lg: "65%" },
           ml: { md: "25%", lg: "20%" }
         }}>
-          <TableContainer sx={{ borderRadius: 3, boxShadow: 3 }}>
+          <TableContainer sx={{ borderRadius: 3, boxShadow: 2, backgroundColor: color.background }}>
             <Table size="small">
 
-              <TableHead sx={{ background: Colors.headings }}>
+              <TableHead sx={{ backgroundColor: color.headings, height: 50 }}>
                 <TableRow>
-                  <TableCell align="center" sx={{ color: Colors.white }}>S.no</TableCell>
-                  <TableCell align="center" sx={{ color: Colors.white }}>Name</TableCell>
-                  <TableCell align="center" sx={{ color: Colors.white }}>LeaveType</TableCell>
-                  <TableCell align="center" sx={{ color: Colors.white }}>From</TableCell>
-                  <TableCell align="center" sx={{ color: Colors.white }}>To</TableCell>
-                  <TableCell align="center" sx={{ color: Colors.white }}>Status</TableCell>
-                  <TableCell align="center" sx={{ color: Colors.white }}>Action</TableCell>
+                  <TableCell  align="start" sx={{ color: color.text }}>S.no</TableCell>
+                  <TableCell  align="start" sx={{ color: color.text }}>Employee</TableCell>
+                  <TableCell  align="start"sx={{ color: color.text }}>LeaveType</TableCell>
+                  <TableCell   align="start"sx={{ color: color.text }}>From</TableCell>
+                  <TableCell align="start" sx={{ color: color.text }}>To</TableCell>
+                  <TableCell  align="start" sx={{ color: color.text }}>Status</TableCell>
+                  <TableCell  align="center"sx={{ color: color.text }}>Action</TableCell>
                 </TableRow>
               </TableHead>
 
@@ -148,12 +169,12 @@ export default function LeaveTable({ data = [], handleView, page, rowsPerPage })
                 {data.map((item, index) => (
                   <TableRow key={item.id} hover>
 
-                    <TableCell align="center">
+                    <TableCell sx={{ color: color.text }}>
                       {page * rowsPerPage + index + 1}
                     </TableCell>
 
-                    <TableCell align="center">
-                      <Box sx={{ display: "flex", alignItems: "center", gap: 1, justifyContent: "center" }}>
+                    <TableCell sx={{ color: color.text }}>
+                      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                         <img
                           src={item.profileImage || "https://via.placeholder.com/40"}
                           alt="profile"
@@ -167,52 +188,60 @@ export default function LeaveTable({ data = [], handleView, page, rowsPerPage })
                       </Box>
                     </TableCell>
 
-                    <TableCell align="center">{item.leaveType}</TableCell>
-                    <TableCell align="center">{item.fromDate}</TableCell>
-                    <TableCell align="center">{item.toDate}</TableCell>
+                    <TableCell sx={{ color: color.text }}>{item.leaveType}</TableCell>
+                    <TableCell sx={{ color: color.text }}>{item.fromDate}</TableCell>
+                    <TableCell sx={{ color: color.text }}>{item.toDate}</TableCell>
 
-                    <TableCell align="center">
+                    <TableCell>
                       <span style={{
                         color:
                           item.status === "approved"
-                            ? "green"
+                            ? color.navbar
                             : item.status === "rejected"
-                              ? "red"
-                              : "orange"
+                              ? color.headings
+                              : color.text
                       }}>
                         {item.status || "pending"}
                       </span>
                     </TableCell>
 
-                    <TableCell align="center">
-                     <Box sx={{ display: "flex", gap: 1, justifyContent: "center" }}>
+                    <TableCell>
+                      <Box sx={{ display: "flex", gap: 1 }}>
 
-  <CommonButton onClick={() => handleView(item)}>
-    View
-  </CommonButton>
+                        <CommonButton
+                          onClick={() => handleView(item)}
+                          sx={{
+                            backgroundColor: color.headings,
+                            color: color.text,
+                            fontSize: Theme.font14Bold
+                          }}
+                        >
+                          View
+                        </CommonButton>
 
-  <CommonButton
-    sx={{
-      backgroundColor: item.status === "approved" ? "green" : Colors.blue,
-      color: "white"
-    }}
-    onClick={() => handleStatus(item, "approved")}
-  >
-    {item.status === "approved" ? "Approved" : "Approve"}
-  </CommonButton>
+                        <CommonButton
+                          sx={{
+                            backgroundColor: item.status === "approved" ? color.navbar : color.background,
+                            color: color.text,
+                            fontSize: Theme.font14Bold
+                          }}
+                          onClick={() => handleStatus(item, "approved")}
+                        >
+                          {item.status === "approved" ? "Approved" : "Approve"}
+                        </CommonButton>
 
+                        <CommonButton
+                          sx={{
+                            backgroundColor: item.status === "rejected" ? color.navbar : color.background,
+                            color: color.text,
+                            fontSize: Theme.font14Bold
+                          }}
+                          onClick={() => handleStatus(item, "rejected")}
+                        >
+                          {item.status === "rejected" ? "Rejected" : "Reject"}
+                        </CommonButton>
 
-  <CommonButton
-    sx={{
-      backgroundColor: item.status === "rejected" ? Colors.red : Colors.red,
-      color: "white"
-    }}
-    onClick={() => handleStatus(item, "rejected")}
-  >
-    {item.status === "rejected" ? "Rejected" : "Reject"}
-  </CommonButton>
-
-</Box>
+                      </Box>
                     </TableCell>
 
                   </TableRow>

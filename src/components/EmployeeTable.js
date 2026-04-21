@@ -2,7 +2,8 @@ import React from "react";
 import {
     Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Box, Card, CardContent,
-    Typography, useMediaQuery
+    Typography, useMediaQuery,
+    Tooltip
 } from "@mui/material";
 
 import CommonButton from "./CommonButton";
@@ -18,24 +19,33 @@ export default function EmployeeTable({
     handleDelete,
     handleAdd,
     handleView,
-     page,
-    rowsPerPage
-     
+    page,
+    rowsPerPage, 
+    darkMode 
+
 }) {
 
     const isMobile = useMediaQuery("(max-width:500px)");
 
+
+   const color = Colors(darkMode); 
+
     return (
         <>
+            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2, ml: { md: 31, lg: 35, xl: 38 }, mr: { lg: 28, xl: 26 }, mt: 15 }}>
 
-            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2, ml: { md: 31, lg: 35, xl: 38 }, mr: { lg: 28, xl: 26, }, mt: 15 }}>
+                <Typography sx={{ mr: { xs: 3, sm: 55, md: 40, lg: 10, xl: 5 }, color: color.text, fontSize: Theme.font20Bold }}>
+                    Employee List:
+                </Typography>
 
-                <Typography sx={{ mr: { xs: 3, sm: 55, md: 40, lg: 10, xl: 5 }, color: Colors.red, fontSize: Theme.font20Bold }}>Employee List:</Typography>
-                <CommonButton variant="contained" sx={{ color: Colors.white, backgroundColor: Colors.headings, ml: 3, fontSize: Theme.font14Bold }} onClick={handleAdd}>
+                <CommonButton
+                    variant="contained"
+                    sx={{ color: color.text, backgroundColor: color.headings, ml: 3, fontSize: Theme.font14Bold }}
+                    onClick={handleAdd}
+                >
                     Add Employee
                 </CommonButton>
             </Box>
-
 
             {isMobile ? (
                 <Box>
@@ -44,17 +54,15 @@ export default function EmployeeTable({
                             key={item.id}
                             sx={{
                                 mb: 2,
-                                boxShadow: `0px 4px 10px ${Colors.black}`
+                                boxShadow: `0px 4px 10px ${color.text}`,
+                                color: color.card
                             }}
                         >
                             <CardContent>
 
                                 <Box sx={{ textAlign: "center", mb: 1 }}>
                                     <img
-                                        src={
-                                            item.profileImage ||
-                                            "https://via.placeholder.com/60"
-                                        }
+                                        src={item.profileImage || "https://via.placeholder.com/60"}
                                         alt="profile"
                                         style={{
                                             width: 80,
@@ -64,25 +72,25 @@ export default function EmployeeTable({
                                     />
                                 </Box>
 
-                                <Typography fontWeight="bold">
+                                <Typography sx={{ color: color.card, fontSize: Theme.font16Bold }}>
                                     Name: {item.employeename}
                                 </Typography>
 
-                                <Typography>Role: {item.role}</Typography>
-                                <Typography>Salary: {item.salary}</Typography>
-                                <Typography>Address: {item.address}</Typography>
-                                <Typography>Email: {item.email}</Typography>
+                                <Typography sx={{ color: color.card, fontSize: Theme.font16Bold }}>Role: {item.role}</Typography>
+                                <Typography sx={{ color: color.card, fontSize: Theme.font16Bold }}>Salary: {item.salary}</Typography>
+                                <Typography sx={{color: color.card, fontSize: Theme.font16Bold }}>Address: {item.address}</Typography>
+                                <Typography sx={{ color: color.card, fontSize: Theme.font16Bold }}>Email: {item.email}</Typography>
 
-                                <Box sx={{ display: "flex", gap: 1, mt: 2 }}>
-                                    <CommonButton onClick={() => handleView(item)} sx={{bgcolor:Colors.view,fontSize:Theme.font14Bold}}>
-                                        View
-                                    </CommonButton>
-                                    <CommonButton onClick={() => handleEdit(item)} sx={{bgcolor:Colors.blue,fontSize:Theme.font14Bold}}>
-                                        Edit
-                                    </CommonButton>
-                                    <CommonButton onClick={() => handleDelete(item.id)}sx={{bgcolor:Colors.red,fontSize:Theme.font14Bold}}>
-                                        Delete
-                                    </CommonButton>
+                                <Box sx={{ display: "flex", gap: 10, mt: 2 }}>
+                                    <span onClick={() => handleView(item)}>
+                                        <VisibilityIcon sx={{ fontSize: 24,color: color.card, ml: 2 }} />
+                                    </span>
+                                    <span onClick={() => handleEdit(item)}>
+                                        <EditIcon sx={{ fontSize: 24,color: color.card }} />
+                                    </span>
+                                    <span onClick={() => handleDelete(item.id)}>
+                                        <DeleteIcon sx={{ fontSize: 24,color: color.card }} />
+                                    </span>
                                 </Box>
 
                             </CardContent>
@@ -91,45 +99,20 @@ export default function EmployeeTable({
                 </Box>
             ) : (
 
+                <Box sx={{ mt: 2, width: { lg: "66%" }, ml: { md: "25%", lg: "20%" } }}>
 
-              <Box sx={{ mt: 2, width: { lg: "66%" }, ml: { md: "25%", lg: "20%" } }}>
-
-                    <TableContainer sx={{width: "100%",border:1, borderRadius: 5, }}>
+                    <TableContainer sx={{ width: "100%", boxShadow: 2, borderRadius: 2 }}>
                         <Table size="small">
 
-                            <TableHead
-                                sx={{
-                                    bgcolor:Colors.headings,height: 50,
-                                }}
-                            >
+                            <TableHead sx={{ bgcolor: color.headings, height: 50 }}>
                                 <TableRow>
-                                    <TableCell align="center" sx={{ color:Colors.white,fontSize:Theme.font16Bold}}>
-                                        S.no
-                                    </TableCell>
-
-                                    <TableCell align="center" sx={{ color:Colors.white,fontSize:Theme.font16Bold}}>
-                                        Employee
-                                    </TableCell>
-
-                                    <TableCell align="center"sx={{ color:Colors.white,fontSize:Theme.font16Bold}}>
-                                        Role
-                                    </TableCell>
-
-                                    <TableCell align="center"sx={{ color:Colors.white,fontSize:Theme.font16Bold}}>
-                                        Salary
-                                    </TableCell>
-
-                                    <TableCell align="center" sx={{ color:Colors.white,fontSize:Theme.font16Bold}}>
-                                        Address
-                                    </TableCell>
-
-                                    <TableCell align="center" sx={{ color:Colors.white,fontSize:Theme.font16Bold}}>
-                                        Email
-                                    </TableCell>
-
-                                    <TableCell align="center"sx={{ color:Colors.white,fontSize:Theme.font16Bold}}>
-                                        Action
-                                    </TableCell>
+                                    <TableCell sx={{ color: color.text, fontSize: Theme.font16Bold }}>S.no</TableCell>
+                                    <TableCell sx={{ color: color.text, fontSize: Theme.font16Bold }}>Employee</TableCell>
+                                    <TableCell sx={{ color: color.text, fontSize: Theme.font16Bold }}>Role</TableCell>
+                                    <TableCell sx={{ color: color.text, fontSize: Theme.font16Bold }}>Salary</TableCell>
+                                    <TableCell sx={{ color: color.text, fontSize: Theme.font16Bold }}>Address</TableCell>
+                                    <TableCell sx={{ color: color.text, fontSize: Theme.font16Bold }}>Email</TableCell>
+                                    <TableCell sx={{ color: color.text, fontSize: Theme.font16Bold }}>Action</TableCell>
                                 </TableRow>
                             </TableHead>
 
@@ -137,66 +120,56 @@ export default function EmployeeTable({
                                 {data.map((item, index) => (
                                     <TableRow key={item.id}>
 
-                                        <TableCell align="center">
-                                          {page * rowsPerPage + index + 1}
+                                        <TableCell sx={{color: color.text}}>
+                                            {page * rowsPerPage + index + 1}
                                         </TableCell>
 
-
-                                        <TableCell align="center">
-                                            <Box
-                                                sx={{
-                                                    display: "flex",
-                                                    alignItems: "center",
-                                                    gap: 1,
-                                                    justifyContent: "center"
-                                                }}
-                                            >
+                                        <TableCell>
+                                            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                                                 <img
-                                                    src={
-                                                        item.profileImage ||
-                                                        "https://via.placeholder.com/40"
-                                                    }
+                                                    src={item.profileImage || "https://via.placeholder.com/40"}
                                                     alt="profile"
                                                     style={{
                                                         width: 40,
                                                         height: 40,
                                                         borderRadius: "50%",
                                                         objectFit: "cover",
-
                                                     }}
                                                 />
 
-                                                <Typography fontWeight="bold">
-                                                    {item.employeename}
-                                                </Typography>
+                                                <Tooltip title={item.employeename} arrow>
+                                                    <Typography
+                                                        sx={{
+                                                            color: color.text,
+                                                            fontSize: Theme.font14Bold,
+                                                            maxWidth: "80px",
+                                                            whiteSpace: "nowrap",
+                                                            overflow: "hidden",
+                                                            textOverflow: "ellipsis",
+                                                        }}
+                                                    >
+                                                        {item.employeename}
+                                                    </Typography>
+                                                </Tooltip>
                                             </Box>
                                         </TableCell>
 
-                                        <TableCell align="center" sx={{ color: Colors.black, fontSize: Theme.font14SemiBold }}>{item.role}</TableCell>
-                                        <TableCell align="center" sx={{ color: Colors.black, fontSize: Theme.font14SemiBold }}>{item.salary}</TableCell>
-                                        <TableCell align="center" sx={{ color: Colors.black, fontSize: Theme.font14SemiBold }}>{item.address}</TableCell>
-                                        <TableCell align="center" sx={{ color: Colors.black, fontSize: Theme.font14SemiBold }}>{item.email}</TableCell>
-
+                                        <TableCell sx={{ color: color.text }}>{item.role}</TableCell>
+                                        <TableCell sx={{ color: color.text }}>{item.salary}</TableCell>
+                                        <TableCell sx={{ color: color.text }}>{item.address}</TableCell>
+                                        <TableCell sx={{ color: color.text }}>{item.email}</TableCell>
 
                                         <TableCell>
-                                            <Box
-                                                sx={{
-                                                    display: "flex",
-                                                    gap: 1,
-                                                    justifyContent: "center"
-                                                }}
-                                            >
-                                                <CommonButton onClick={() => handleView(item)} sx={{ backgroundColor:Colors.view, color:Colors.white, fontSize: Theme.font14Bold }}>
-                                                    <VisibilityIcon />
-                                                </CommonButton>
-
-                                                <CommonButton onClick={() => handleEdit(item)} sx={{ backgroundColor:Colors.blue, color:Colors.white,  fontSize: Theme.font14Bold }}>
-                                                    <EditIcon />
-                                                </CommonButton>
-
-                                                <CommonButton onClick={() => handleDelete(item.id)} sx={{ backgroundColor:Colors.red, color:Colors.white,  fontSize: Theme.font14Bold }}>
-                                                    <DeleteIcon />
-                                                </CommonButton>
+                                            <Box sx={{ display: "flex", gap: 1 }}>
+                                                <span onClick={() => handleView(item)}>
+                                                    <VisibilityIcon sx={{ fontSize: 18, color: color.text }} />
+                                                </span>
+                                                <span onClick={() => handleEdit(item)}>
+                                                    <EditIcon sx={{ fontSize: 18, color: color.text }} />
+                                                </span>
+                                                <span onClick={() => handleDelete(item.id)}>
+                                                    <DeleteIcon sx={{ fontSize: 18, color: color.text }} />
+                                                </span>
                                             </Box>
                                         </TableCell>
 

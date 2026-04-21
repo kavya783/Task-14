@@ -47,10 +47,7 @@ function EmployeeHome() {
         alignItems: "center",
         px: 2,
         mt: 5,
-        // background:
-        //   "linear-gradient(135deg, #5f9cff, #7b5cff, #9c5cff)",
-
-      }}
+           }}
     >
       {employee && (
         <Card
@@ -61,8 +58,8 @@ function EmployeeHome() {
               md: 300,
             },
             borderRadius: 10,
-            background: Colors.white,
-            boxShadow: "0px 10px 30px rgba(0,0,0,0.3)",
+            
+            boxShadow: "0px 10px 15px rgba(0,0,0,0.1)",
             p: { xs: 2, sm: 3 },
             transition: "0.3s",
             "&:hover": {
@@ -100,22 +97,22 @@ function EmployeeHome() {
 
             <Stack spacing={2}>
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <EmailIcon sx={{color:Colors.blue}} />
-                <Typography fontSize={{ xs: 14, sm: 16 }}>
+                <EmailIcon sx={{color:Colors.navbar}} />
+                <Typography fontSize={{ xs: 14, sm: 16 }} sx={{color:Colors.black}}>
                   {employee.email}
                 </Typography>
               </Box>
 
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <WorkIcon sx={{color:Colors.black}} />
-                <Typography fontSize={{ xs: 14, sm: 16 }}>
+                <WorkIcon sx={{color:Colors.navbar}} />
+                <Typography fontSize={{ xs: 14, sm: 16 }} sx={{color:Colors.black}}>
                   {employee.role}
                 </Typography>
               </Box>
 
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <CurrencyRupeeIcon sx={{ color:Colors.view }} />
-                <Typography fontSize={{ xs: 14, sm: 16 }}>
+                <CurrencyRupeeIcon sx={{ color:Colors.navbar }} />
+                <Typography fontSize={{ xs: 14, sm: 16}} sx={{color:Colors.black}}>
                   {employee.salary}
                 </Typography>
               </Box>
@@ -133,7 +130,8 @@ function EmployeeHome() {
                 fontSize: { xs: 14, sm: 16 },
                 py: { xs: 1, sm: 1.5 },
                 background:
-                  Colors.blue,
+                  Colors.headings,
+                  color:Colors.black,
               }}
               onClick={() => navigate("/leave/form")}
             >

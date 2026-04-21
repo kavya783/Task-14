@@ -9,103 +9,109 @@ import { useEffect, useState } from "react";
 import Colors from "../colors";
 import { Theme } from "../GlobalStyles";
 
-function NavBar({ }) { 
+function NavBar({ darkMode }) {
   const [open, setOpen] = useState(false);
-  const [roled, setRoled] = useState('');
+  const [roled, setRoled] = useState("");
   const location = useLocation();
 
+  const color = Colors(darkMode);
+
   useEffect(() => {
-    const ghjk = async()=>{
-     const storedRole = localStorage.getItem("role");
-      if (storedRole) setRoled(storedRole);
-    }
-    ghjk();
+    const storedRole = localStorage.getItem("role");
+    if (storedRole) setRoled(storedRole);
   }, []);
 
   const linkStyles = {
     p: 2,
     display: "block",
     textDecoration: "none",
-    color: Colors.black,
-    "&:hover": {
-      color:  Colors.red,
-    },
+    color: color.text,
   };
 
- const drawerContent = (
-  <Box sx={{ width: 240, mt: 5, backgroundColor: Colors.white, height: "100%" }}>
+  const drawerContent = (
+    <Box sx={{ width: 240, backgroundColor: color.background, height: "100%" }}>
 
+      {roled === "hr" && (
+        <>
+          <Link to="/hr" style={{ textDecoration: "none" }}>
+            <Typography sx={{
+              ...linkStyles,
+              ...(location.pathname === "/hr" && {
+                backgroundColor: color.headings,
+                color: color.text,
+                fontSize: Theme.font16SemiBold,
+                mt: 1,
+              }),
+            }}>
+              Employees
+            </Typography>
+          </Link>
 
-    {roled === "hr" && (
-      <>
-        <Link to="/hr" style={{ textDecoration: "none" }}>
-          <Typography sx={{...linkStyles,  ...(location.pathname === "/hr" && {
-            backgroundColor:Colors.headings,
-              color: Colors.white,
-              fontSize:Theme.font16SemiBold,
-          }),}}>Employees</Typography>
-        </Link>
-      
-        <Divider />
+          <Divider />
 
-        <Link to="/leave" style={{ textDecoration: "none" }}>
-          <Typography sx={{...linkStyles,  ...(location.pathname === "/leave" && {
-            backgroundColor:Colors.headings,
-              color: Colors.white,
-              fontSize:Theme.font16SemiBold,
-          }),
-          }}>Leaves</Typography>
-        </Link>
+          <Link to="/leave" style={{ textDecoration: "none" }}>
+            <Typography sx={{
+              ...linkStyles,
+              ...(location.pathname === "/leave" && {
+                backgroundColor: color.headings,
+                color: color.text,
+              }),
+            }}>
+              Leaves
+            </Typography>
+          </Link>
+        </>
+      )}
 
-        <Divider />
-      </>
-    )}
+      {roled === "employee" && (
+        <>
+          <Link to="/employee" style={{ textDecoration: "none" }}>
+            <Typography sx={{
+              ...linkStyles,
+              ...(location.pathname === "/employee" && {
+                backgroundColor: color.headings,
+                color: color.text,
+              }),
+            }}>
+              Home
+            </Typography>
+          </Link>
 
-  
-    {roled === "employee" && (
-      <>
-        <Link to="/employee" style={{ textDecoration: "none" }}>
-          <Typography sx={{
-            ...linkStyles,
-            ...(location.pathname === "/employee" && {
-              backgroundColor:Colors.headings,
-              color: Colors.white,
-              fontSize:Theme.font16SemiBold,
-            }),
-          }}
-        >Home</Typography>
-        </Link>
-         <Link to="/leave/status" style={{ textDecoration: "none" }}>
-          <Typography sx={{
-            ...linkStyles,
-            ...(location.pathname === "/leave/status" && {
-              backgroundColor: Colors.headings,
-              color: Colors.white,
-              fontSize:Theme.font16SemiBold,
-            }),
-          }}
-        >Leave Status</Typography>
-        </Link>
-      </>
-    )}
+          <Divider />
 
-  </Box>
-);
+          <Link to="/leave/status" style={{ textDecoration: "none" }}>
+            <Typography sx={{
+              ...linkStyles,
+              ...(location.pathname === "/leave/status" && {
+                backgroundColor: color.headings,
+                color: color.text,
+              }),
+            }}>
+              Leave Status
+            </Typography>
+          </Link>
+        </>
+      )}
+    </Box>
+  );
+
   return (
     <>
+      
       <Box
         sx={{
           display: { xs: "block", md: "none" },
           position: "absolute",
           top: 90,
-          right:20,
+          right: 20,
           zIndex: 1300,
         }}
       >
         <IconButton onClick={() => setOpen(true)}>
-          <MenuIcon sx={{ color:  "#000" }} />
+          <MenuIcon sx={{ color: color.text }} />
         </IconButton>
       </Box>
+
 
       <Drawer
         open={open}
@@ -114,15 +120,14 @@ function NavBar({ }) {
           display: { xs: "block", md: "none" },
           "& .MuiDrawer-paper": {
             width: 240,
-            top: "60px",
-            mr:50,
-            backgroundColor: Colors.white,
+            backgroundColor: color.background,
           },
         }}
       >
         {drawerContent}
       </Drawer>
 
+      {/* Desktop Drawer */}
       <Drawer
         variant="permanent"
         sx={{
@@ -131,7 +136,7 @@ function NavBar({ }) {
             width: 240,
             top: "65px",
             height: "calc(100vh - 64px)",
-            backgroundColor:Colors.white,
+            backgroundColor: color.background,
           },
         }}
       >

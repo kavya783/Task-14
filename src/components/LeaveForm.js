@@ -21,9 +21,10 @@ import { toast } from "react-toastify";
 import Colors from "../colors";
 import { Theme } from "../GlobalStyles";
 
-function LeaveForm() {
+function LeaveForm({ darkMode, setDarkMode }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const color = Colors(darkMode);
 
   const initialLeave = {
     employeename: "",
@@ -122,11 +123,10 @@ function LeaveForm() {
       toast.success("Leave added successfully!");
 
       setLeave(initialLeave);
-      navigate("/employee-dashboard");
+      navigate("/employee");
     }
   };
 
-  // ✅ IMAGE HANDLE (SAFE)
   const handleImageChange = (e) => {
     if (!e || !e.target || !e.target.files) return;
 
@@ -164,16 +164,16 @@ function LeaveForm() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        background: Colors.background
+       
       }}
     >
       <Card
         sx={{
           width: 340,
           borderRadius: 4,
-          background: Colors.white,
-          boxShadow: "0px 8px 25px rgba(0,0,0,0.8)",
-          p: 2
+          p: 2,
+          backgroundColor: color.background,
+          color: color.text
         }}
       >
         <CardContent>
@@ -182,13 +182,13 @@ function LeaveForm() {
               sx={{
                 width: 45,
                 height: 45,
-                background: Colors.blue
+                background: color.background
               }}
             >
               <WorkIcon fontSize="small" />
             </Avatar>
 
-            <Typography sx={{ fontSize: Theme.font20Bold, color: Colors.headings }}>
+            <Typography sx={{ fontSize: Theme.font20Bold, color: color.headings }}>
               Apply Leave
             </Typography>
           </Stack>
@@ -200,18 +200,69 @@ function LeaveForm() {
               value={leave.employeename}
               fullWidth
               disabled
-              sx={{ mb: 1 }}
+              sx={{
+                mb: 1,
+                mt: 3,
+
+                "& .MuiInputLabel-root": {
+                  color: color.text
+                },
+                "& .MuiInputLabel-root.Mui-disabled": {
+                  color: color.text
+                },
+
+                "& .MuiInputBase-input": {
+                  color: color.text
+                },
+                "& .MuiInputBase-input.Mui-disabled": {
+                  WebkitTextFillColor: color.text
+                },
+
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: color.text
+                  },
+                  "&.Mui-disabled fieldset": {
+                    borderColor: color.text
+                  }
+                }
+              }}
             />
 
             <TextField
               size="small"
-              label="Email"
+              label="email  "
               value={leave.email}
               fullWidth
               disabled
-              sx={{ mb: 1.5 }}
-            />
+              sx={{
+                mb: 1,
+                mt: 3,
 
+                "& .MuiInputLabel-root": {
+                  color: color.text
+                },
+                "& .MuiInputLabel-root.Mui-disabled": {
+                  color: color.text   // 🔥 label white
+                },
+
+                "& .MuiInputBase-input": {
+                  color: color.text
+                },
+                "& .MuiInputBase-input.Mui-disabled": {
+                  WebkitTextFillColor: color.text // 🔥 important (Chrome fix)
+                },
+
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: color.text
+                  },
+                  "&.Mui-disabled fieldset": {
+                    borderColor: color.text // 🔥 border white
+                  }
+                }
+              }}
+            />
             <TextField
               select
               size="small"
@@ -222,11 +273,67 @@ function LeaveForm() {
               onChange={handleChange}
               error={!!errors.leaveType}
               helperText={errors.leaveType}
-              sx={{ mb: 1.5 }}
+              sx={{
+                "& .MuiInputLabel-root": {
+                  color: color.text
+                },
+                "& .MuiInputLabel-root.Mui-focused": {
+                  color: color.navbar
+                },
+                "& .MuiSelect-select": {
+                  color: color.text
+                },
+                "& .MuiSvgIcon-root": {
+                  color: color.text
+                },
+                "& .MuiOutlinedInput-root": {
+                  color: color.card,
+                  "& fieldset": { borderColor: color.text },
+                  "&:hover fieldset": { borderColor: color.text },
+                  "&.Mui-focused fieldset": { borderColor: color.navbar }
+                }
+              }}
             >
-              <MenuItem value="Casual">Casual</MenuItem>
-              <MenuItem value="Sick">Sick</MenuItem>
-              <MenuItem value="Emergency">Emergency</MenuItem>
+              <MenuItem
+                value="Casual"
+                sx={{
+                  backgroundColor: color.background,
+                  color: color.text,
+                  "&.Mui-selected": {
+                    backgroundColor: color.background,
+                    color: color.text
+                  },
+                  "&.Mui-selected:hover": {
+                    backgroundColor: color.background
+                  }
+                }}
+              >Casual</MenuItem>
+              <MenuItem
+                value="Sick"
+                sx={{
+                  backgroundColor: color.background,
+                  color: color.text,
+                  "&.Mui-selected": {
+                    backgroundColor: color.background,
+                    color: color.text
+                  },
+                  "&.Mui-selected:hover": {
+                    backgroundColor: color.background
+                  }
+                }}>Sick</MenuItem>
+              <MenuItem
+                value="Emergency"
+                sx={{
+                  backgroundColor: color.background,
+                  color: color.text,
+                  "&.Mui-selected": {
+                    backgroundColor: color.background,
+                    color: color.text
+                  },
+                  "&.Mui-selected:hover": {
+                    backgroundColor: color.background
+                  }
+                }}>Emergency</MenuItem>
             </TextField>
 
             <Box sx={{ display: "flex", gap: 1 }}>
@@ -239,7 +346,18 @@ function LeaveForm() {
                 onChange={handleChange}
                 error={!!errors.fromDate}
                 helperText={errors.fromDate}
+                sx={{
+                  input: { color: color.text },
+                  label: { color: color.text },
+
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": { borderColor: color.text },
+                    "&:hover fieldset": { borderColor: color.text },
+                    "&.Mui-focused fieldset": { borderColor: color.navbar },
+                  }
+                }}
               />
+
               <TextField
                 size="small"
                 type="date"
@@ -249,6 +367,16 @@ function LeaveForm() {
                 onChange={handleChange}
                 error={!!errors.toDate}
                 helperText={errors.toDate}
+                sx={{
+                  input: { color: color.text },
+                  label: { color: color.text },
+
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": { borderColor: color.text },
+                    "&:hover fieldset": { borderColor: color.text },
+                    "&.Mui-focused fieldset": { borderColor: color.navbar },
+                  }
+                }}
               />
             </Box>
 
@@ -263,21 +391,30 @@ function LeaveForm() {
               onChange={handleChange}
               error={!!errors.reason}
               helperText={errors.reason}
-              sx={{ mt: 1.5 }}
+              sx={{
+                input: { color: color.text },
+                label: { color: color.text },
+
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: color.text },
+                  "&:hover fieldset": { borderColor: color.text },
+                  "&.Mui-focused fieldset": { borderColor: color.navbar },
+                }
+              }}
             />
 
-           
             <Box sx={{ display: "flex", gap: 1, mt: 2 }}>
               <Button
                 type="button"
                 fullWidth
                 variant="outlined"
                 onClick={() => navigate("/employee")}
+                sx={{ color: color.card, fontSize: Theme.font14Bold }}
               >
                 Back
               </Button>
 
-              <Button type="submit" fullWidth variant="contained">
+              <Button type="submit" fullWidth variant="contained" sx={{ color: color.text, background: color.navbar, fontSize: Theme.font14Bold }}   >
                 Submit
               </Button>
             </Box>

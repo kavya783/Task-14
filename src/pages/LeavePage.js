@@ -11,25 +11,24 @@ import {
     DialogTitle,
     DialogContent,
     DialogActions,
-
     TablePagination,
-
 } from "@mui/material";
 
 import LeaveTable from "../components/LeaveTable";
-
 import { getLeaveDataActionInitiate } from "../redux/actions/getLeaveAction";
 
 import AppBarr from "../components/appBar";
-import NavBar from "../components/NavBar";
+
+
+
 import Loader from "../components/Loader";
 
+function LeavePage({ darkMode, setDarkMode }) {
 
+    const color = Colors(darkMode); 
 
-function LeavePage() {
     const dispatch = useDispatch();
     const data = useSelector((state) => state.getleavereducer?.data) || [];
-    console.log("leave data--------------", data)
 
     const initialEmployee = {
         employeename: "",
@@ -38,46 +37,41 @@ function LeavePage() {
         address: "",
         email: "",
         userId: data?._id,
-
-
     };
+
     const [type, setType] = useState("add");
     const [show, setShow] = useState(false);
     const [employee, setEmployee] = useState(initialEmployee);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const isMobile = useMediaQuery("(max-width:600px)");
-     const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         getAllLeaves();
     }, []);
+
     const getAllLeaves = async () => {
         try {
-             setLoading(true);
+            setLoading(true);
             await dispatch(getLeaveDataActionInitiate());
         } catch (error) {
             console.log("error", error);
         } finally {
-        setLoading(false); 
-    }
+            setLoading(false);
+        }
     };
+
     const handleClose = () => {
         setShow(false);
         setEmployee(initialEmployee);
     };
-
-
-
-
-
 
     const handleView = (item) => {
         setType("view");
         setEmployee(item);
         setShow(true);
     };
-
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -88,146 +82,148 @@ function LeavePage() {
         setPage(0);
     };
 
-    // const pendingLeaves = data.filter(
-    //     (item) => item.status !== "approved" && item.status !== "rejected"
-    // );
-
     const paginatedProducts = data.slice(
         page * rowsPerPage,
         page * rowsPerPage + rowsPerPage
     );
-    console.log("DATA FROM REDUX ", data);
-     if (loading) return <Loader />;
+
+    if (loading) return <Loader />;
 
     return (
-
         <>
-            <AppBarr roled="hr" />
-            <NavBar />
+            <AppBarr 
+                roled="hr" 
+                darkMode={darkMode} 
+                setDarkMode={setDarkMode} 
+            />
+
+          
             <Box
-            sx={{background:Colors.background,height:720,}}>
+                sx={{
+                    background: color.background,
+                    height: { xs: 600, sm: 570, md: 560, lg: 728 },
+                }}
+            >
+                <Box sx={{ padding: 1, background: color.background, }}>
 
+                    {type === "view" && (
+                        <Dialog open={show} onClose={handleClose}>
+                            <DialogTitle sx={{ color: color.text,bgcolor:color.background }}>
+                                Employee Details
+                            </DialogTitle>
 
-            <Box sx={{ padding: 1 }}>
-                {type === "view" && (
-                    <Dialog open={show} onClose={handleClose}>
-                        <DialogTitle sx={{ color: Colors.red }}>Employee Details</DialogTitle>
-                        <DialogContent
-                            sx={{
-                                minHeight: 100,
-                                minWidth: 300,
-                                display: "flex",
-                                flexDirection: "column",
-                                gap: 2,
-                                fontSize: Theme.font20Bold,
-                                bgcolor: Colors.white,
-                                color: Colors.black,
-                                
-                            }}
-                        >
-                             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <Typography sx={{ fontSize:Theme.font14Bold, color: Colors.black }}>
-                      <b>Name:</b>
-                    </Typography>
+                            <DialogContent
+                                sx={{
+                                    minHeight: 100,
+                                    minWidth: 300,
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    gap: 2,
+                                    fontSize: Theme.font20Bold,
+                                    bgcolor: color.background,
+                                    color: color.text,
+                                }}
+                            >
 
-                    <Typography sx={{ fontSize: Theme.font16SemiBold, color: Colors.blue }}>
-                      {employee.employeename}
-                    </Typography>
-                  </Box>
-                             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <Typography sx={{ fontSize: Theme.font14Bold, color: Colors.black }}>
-                      <b>LeaveType:</b>
-                    </Typography>
+                                <Box sx={{ display: "flex", gap: 1 }}>
+                                    <Typography sx={{ fontSize: Theme.font14Bold }}>
+                                        <b>Name:</b>
+                                    </Typography>
+                                    <Typography sx={{ fontSize: Theme.font16SemiBold }}>
+                                        {employee.employeename}
+                                    </Typography>
+                                </Box>
 
-                    <Typography sx={{ fontSize: Theme.font16SemiBold, color: Colors.blue }}>
-                      {employee.leaveType}
-                    </Typography>
-                  </Box>
-                            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <Typography sx={{ fontSize: Theme.font14Bold, color: Colors.black }}>
-                      <b>FromDate:</b>
-                    </Typography>
+                                <Box sx={{ display: "flex", gap: 1 }}>
+                                    <Typography sx={{ fontSize: Theme.font14Bold }}>
+                                        <b>LeaveType:</b>
+                                    </Typography>
+                                    <Typography sx={{ fontSize: Theme.font16SemiBold }}>
+                                        {employee.leaveType}
+                                    </Typography>
+                                </Box>
 
-                    <Typography sx={{ fontSize: Theme.font16SemiBold, color: Colors.blue }}>
-                      {employee.fromDate}
-                    </Typography>
-                  </Box>
-                           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <Typography sx={{ fontSize: Theme.font14Bold, color: Colors.black }}>
-                      <b>ToDate:</b>
-                    </Typography>
+                                <Box sx={{ display: "flex", gap: 1 }}>
+                                    <Typography sx={{ fontSize: Theme.font14Bold }}>
+                                        <b>FromDate:</b>
+                                    </Typography>
+                                    <Typography sx={{ fontSize: Theme.font16SemiBold }}>
+                                        {employee.fromDate}
+                                    </Typography>
+                                </Box>
 
-                    <Typography sx={{ fontSize: Theme.font16SemiBold, color: Colors.blue }}>
-                      {employee.toDate}
-                    </Typography>
-                  </Box>
-                            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <Typography sx={{ fontSize: Theme.font14Bold, color: Colors.black }}>
-                      <b>Email:</b>
-                    </Typography>
+                                <Box sx={{ display: "flex", gap: 1 }}>
+                                    <Typography sx={{ fontSize: Theme.font14Bold }}>
+                                        <b>ToDate:</b>
+                                    </Typography>
+                                    <Typography sx={{ fontSize: Theme.font16SemiBold }}>
+                                        {employee.toDate}
+                                    </Typography>
+                                </Box>
 
-                    <Typography sx={{ fontSize: Theme.font16SemiBold, color: Colors.blue }}>
-                      {employee.email}
-                    </Typography>
-                  </Box>
-                            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <Typography sx={{ fontSize: Theme.font14Bold, color: Colors.black }}>
-                      <b>Reason:</b>
-                    </Typography>
+                                <Box sx={{ display: "flex", gap: 1 }}>
+                                    <Typography sx={{ fontSize: Theme.font14Bold }}>
+                                        <b>Email:</b>
+                                    </Typography>
+                                    <Typography sx={{ fontSize: Theme.font16SemiBold }}>
+                                        {employee.email}
+                                    </Typography>
+                                </Box>
 
-                    <Typography sx={{ fontSize: Theme.font16SemiBold, color: Colors.blue }}>
-                      {employee.reason}
-                    </Typography>
-                  </Box>
-                        </DialogContent>
-                        <DialogActions>
-                            <Box sx={{}}>
+                                <Box sx={{ display: "flex", gap: 1 }}>
+                                    <Typography sx={{ fontSize: Theme.font14Bold }}>
+                                        <b>Reason:</b>
+                                    </Typography>
+                                    <Typography sx={{ fontSize: Theme.font16SemiBold }}>
+                                        {employee.reason}
+                                    </Typography>
+                                </Box>
+
+                            </DialogContent>
+
+                            <DialogActions>
                                 <CommonButton
                                     onClick={handleClose}
-                                    sx={{ backgroundColor: Colors.view, color: Colors.white, mr: 5 }}
+                                    sx={{
+                                        backgroundColor: color.navbar,
+                                        color: color.text,
+                                        mr: 2,
+                                    }}
                                 >
                                     Close
                                 </CommonButton>
+                            </DialogActions>
+                        </Dialog>
+                    )}
 
-                            </Box>
-                        </DialogActions>
-                    </Dialog>
-                )}
+                    <LeaveTable
+                        data={paginatedProducts}
+                        handleView={handleView}
+                        page={page}
+                        rowsPerPage={rowsPerPage}
+                         darkMode={darkMode} 
+                    />
 
+                    <TablePagination
+                        component="div"
+                        count={data.length}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        rowsPerPage={rowsPerPage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                        rowsPerPageOptions={[5, 10, 25]}
+                        sx={{
+                            mt: 2,
+                            display: "flex",
+                            justifyContent: "end",
+                            color: color.text,
+                        }}
+                    />
 
-
-                <LeaveTable
-                    data={paginatedProducts}
-                    handleView={handleView}
-                    page={page}
-                    rowsPerPage={rowsPerPage}
-                />
-
-                <TablePagination
-                    component="div"
-                  count={data.length}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    rowsPerPage={rowsPerPage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                    rowsPerPageOptions={[5, 10, 25]}
-                    sx={{
-                        mt: 2,
-                        display: "flex",
-                        justifyContent: "end",
-                        color: Colors.black,
-
-                    }}
-                />
+                </Box>
             </Box>
-            </Box>
-
-
-
-
         </>
     );
 }
-
 
 export default LeavePage;

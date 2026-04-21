@@ -11,10 +11,14 @@ import EmployeeDashboard from "./pages/EmployeeDashboard";
 import { ToastContainer } from "react-toastify";
 import EmployeeLeave from "./components/EmployeeLeave";
 
+import { useState } from "react";
+
 function App() {
+
+  const [darkMode, setDarkMode] = useState(false);
+
   return (
     <Provider store={store}>
-      
       <BrowserRouter>
         <Routes>
 
@@ -24,7 +28,10 @@ function App() {
             path="/hr"
             element={
               <ProtectedRoute roleAllowed={["hr"]}>
-                <HrDashboard />
+                <HrDashboard 
+                  darkMode={darkMode} 
+                  setDarkMode={setDarkMode} 
+                />
               </ProtectedRoute>
             }
           />
@@ -33,7 +40,10 @@ function App() {
             path="/leave"
             element={
               <ProtectedRoute roleAllowed={["hr"]}>
-                <LeavePage />
+                <LeavePage 
+                  darkMode={darkMode} 
+                  setDarkMode={setDarkMode} 
+                />
               </ProtectedRoute>
             }
           />
@@ -42,35 +52,42 @@ function App() {
             path="/employee"
             element={
               <ProtectedRoute roleAllowed={["employee"]}>
-                <EmployeeDashboard />
+                <EmployeeDashboard 
+                  darkMode={darkMode} 
+                  setDarkMode={setDarkMode} 
+                />
               </ProtectedRoute>
             }
           />
+
           <Route
             path="/leave/form"
             element={
               <ProtectedRoute roleAllowed={["employee"]}>
-                <LeaveForm />
+                <LeaveForm 
+                 darkMode={darkMode} 
+               setDarkMode={setDarkMode} />
               </ProtectedRoute>
             }
           />
-          
-           <Route path="/leave/status" element={
-             <ProtectedRoute roleAllowed={["employee"]}>
-              <EmployeeLeave />
-             </ProtectedRoute>
-            } />
 
+        <Route
+  path="/leave/status"
+  element={
+    <ProtectedRoute roleAllowed={["employee"]}>
+      <EmployeeLeave 
+        darkMode={darkMode} 
+        setDarkMode={setDarkMode} 
+      />
+    </ProtectedRoute>
+  }
+/>
+        
         </Routes>
       </BrowserRouter>
-              <ToastContainer />
+
+      <ToastContainer />
     </Provider>
-    
   );
 }
 export default App;
-
-
-
-
-

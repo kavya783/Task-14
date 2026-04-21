@@ -7,13 +7,14 @@ import {
   TextField,
   MenuItem,
   Box,
+  colors,
 } from "@mui/material";
 import Colors from "../colors";
 import CommonButton from "./CommonButton";
 import { toast } from "react-toastify";
 import bcrypt from "bcryptjs";
 
-export default function EmployeeForm({
+export default function EmployeeForm({ darkMode, setDarkMode,
   employee,
   handleChange,
   submitHandle,
@@ -22,6 +23,8 @@ export default function EmployeeForm({
   type
 }) {
   const [errors, setErrors] = useState({});
+
+  const color = Colors(darkMode);
 
   const handleInputChange = (e) => {
     const { name } = e.target;
@@ -39,6 +42,9 @@ export default function EmployeeForm({
 
     if (!employee.employeename)
       newErrors.employeename = "Name is required";
+    // } else if (employee.employeename.length >= 15) {
+    //   newErrors.employeename = "Name must be 1 to 15  letters  only";
+    // }
 
     if (!employee.role)
       newErrors.role = "Role is required";
@@ -63,7 +69,7 @@ export default function EmployeeForm({
     return Object.keys(newErrors).length === 0;
   };
 
- 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -120,16 +126,23 @@ export default function EmployeeForm({
   };
 
   return (
-    <Dialog open={show} onClose={handleClose} fullWidth maxWidth="sm">
-      <DialogTitle sx={{ color: Colors.navbar }}>
+    <Dialog open={show} onClose={handleClose} fullWidth maxWidth="sm" PaperProps={{
+      sx: {
+        backgroundColor: color.background,
+      }
+    }}>
+      <DialogTitle sx={{ color: color.text, backgroundColor: color.background }}>
         {type === "add"
           ? "Add Employee"
           : type === "edit"
-          ? "Edit Employee"
-          : "View Employee"}
+            ? "Edit Employee"
+            : "View Employee"}
       </DialogTitle>
 
-      <DialogContent>
+      <DialogContent sx={{
+        color: color.text,
+        backgroundColor: color.background
+      }}>
         <form onSubmit={handleSubmit}>
 
           <TextField
@@ -141,6 +154,15 @@ export default function EmployeeForm({
             margin="dense"
             error={!!errors.employeename}
             helperText={errors.employeename}
+            sx={{
+              input: { color: color.text },
+              label: { color: color.text },
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": { borderColor: color.text },
+                "&:hover fieldset": { borderColor: color.text },
+                "&.Mui-focused fieldset": { borderColor: color.navbar },
+              }
+            }}
           />
 
           <TextField
@@ -153,9 +175,62 @@ export default function EmployeeForm({
             margin="dense"
             error={!!errors.role}
             helperText={errors.role}
+            sx={{
+              "& .MuiInputLabel-root": {
+                color: color.text
+              },
+              "& .MuiInputLabel-root.Mui-focused": {
+                color: color.navbar
+              },
+              "& .MuiSelect-select": {
+                color: color.text
+              },
+              "& .MuiSvgIcon-root": {
+                color: color.text
+              },
+              "& .MuiOutlinedInput-root": {
+                color: color.text,  // important
+                "& fieldset": { borderColor: color.text },
+                "&:hover fieldset": { borderColor: color.text },
+                "&.Mui-focused fieldset": { borderColor: color.navbar }
+              }
+            }}
           >
-            <MenuItem value="HR">HR</MenuItem>
-            <MenuItem value="Employee">Employee</MenuItem>
+
+
+            <MenuItem
+              value="HR"
+              sx={{
+                backgroundColor: color.background,
+                color: color.text,
+                "&.Mui-selected": {
+                  backgroundColor: color.background,
+                  color: color.text
+                },
+                "&.Mui-selected:hover": {
+                  backgroundColor: color.background
+                }
+              }}
+            >
+              HR
+            </MenuItem>
+
+            <MenuItem
+              value="Employee"
+              sx={{
+                backgroundColor: color.background,
+                color: color.text,
+                "&.Mui-selected": {
+                  backgroundColor: color.background,
+                  color: color.text
+                },
+                "&.Mui-selected:hover": {
+                  backgroundColor: color.background
+                }
+              }}
+            >
+              Employee
+            </MenuItem>
           </TextField>
 
           <TextField
@@ -167,7 +242,18 @@ export default function EmployeeForm({
             margin="dense"
             error={!!errors.salary}
             helperText={errors.salary}
+            sx={{
+              input: { color: color.text },
+              label: { color: color.text },
+
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": { borderColor: color.text },
+                "&:hover fieldset": { borderColor: color.text },
+                "&.Mui-focused fieldset": { borderColor: color.navbar },
+              }
+            }}
           />
+
 
           <TextField
             label="Address"
@@ -178,8 +264,16 @@ export default function EmployeeForm({
             margin="dense"
             error={!!errors.address}
             helperText={errors.address}
+            sx={{
+              input: { color: color.text },
+              label: { color: color.text },
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": { borderColor: color.text },
+                "&:hover fieldset": { borderColor: color.text },
+                "&.Mui-focused fieldset": { borderColor: color.navbar },
+              }
+            }}
           />
-
           <TextField
             label="Email"
             name="email"
@@ -189,6 +283,15 @@ export default function EmployeeForm({
             margin="dense"
             error={!!errors.email}
             helperText={errors.email}
+            sx={{
+              input: { color: color.text },
+              label: { color: color.text },
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": { borderColor: color.text },
+                "&:hover fieldset": { borderColor: color.text },
+                "&.Mui-focused fieldset": { borderColor: color.navbar },
+              }
+            }}
           />
 
           <TextField
@@ -201,8 +304,16 @@ export default function EmployeeForm({
             margin="dense"
             error={!!errors.password}
             helperText={errors.password}
+            sx={{
+              input: { color: color.text },
+              label: { color: color.text },
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": { borderColor: color.text },
+                "&:hover fieldset": { borderColor: color.text },
+                "&.Mui-focused fieldset": { borderColor: color.navbar },
+              }
+            }}
           />
-
           <Box sx={{ mt: 2 }}>
             <CommonButton
               variant="contained"
@@ -210,7 +321,8 @@ export default function EmployeeForm({
               sx={{
                 textTransform: "none",
                 borderRadius: 2,
-                background: Colors.blue,
+                background: color.headings,
+                color: color.text,
               }}
             >
               Upload Image
@@ -224,7 +336,7 @@ export default function EmployeeForm({
           </Box>
 
           {errors.profileImage && (
-            <p style={{ color: "red", fontSize: "12px" }}>
+            <p style={{ color: color.text, fontSize: "12px" }}>
               {errors.profileImage}
             </p>
           )}
@@ -246,7 +358,7 @@ export default function EmployeeForm({
           <DialogActions>
             <CommonButton
               onClick={handleClose}
-              sx={{ backgroundColor: Colors.view }}
+              sx={{ backgroundColor: color.background, color: color.text }}
             >
               Cancel
             </CommonButton>
@@ -254,7 +366,7 @@ export default function EmployeeForm({
             {type !== "view" && (
               <CommonButton
                 type="submit"
-                sx={{ backgroundColor: Colors.blue }}
+                sx={{ backgroundColor: color.navbar, color: color.headings }}
               >
                 {type === "add" ? "Add Employee" : "Update Employee"}
               </CommonButton>
