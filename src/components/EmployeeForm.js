@@ -12,9 +12,12 @@ import {
 import Colors from "../colors";
 import CommonButton from "./CommonButton";
 import { toast } from "react-toastify";
-import bcrypt from "bcryptjs";
+import { hashPassword } from "./HashPassword";
 
-export default function EmployeeForm({ darkMode, setDarkMode,
+
+export default function EmployeeForm({
+  darkMode,
+  setDarkMode,
   employee,
   handleChange,
   submitHandle,
@@ -42,9 +45,6 @@ export default function EmployeeForm({ darkMode, setDarkMode,
 
     if (!employee.employeename)
       newErrors.employeename = "Name is required";
-    // } else if (employee.employeename.length >= 15) {
-    //   newErrors.employeename = "Name must be 1 to 15  letters  only";
-    // }
 
     if (!employee.role)
       newErrors.role = "Role is required";
@@ -70,26 +70,22 @@ export default function EmployeeForm({ darkMode, setDarkMode,
   };
 
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
 
-    if (validate()) {
-      const saltRounds = 10;
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-      const hashedPassword = await bcrypt.hash(
-        employee.password,
-        saltRounds
-      );
+  if (validate()) {
+    const hashedPassword = await hashPassword
+    (employee.password);
 
-      const updatedEmployee = {
-        ...employee,
-        password: hashedPassword
-      };
+    const updatedEmployee = {
+      ...employee,
+      password: hashedPassword
+    };
 
-      submitHandle(updatedEmployee);
-    }
-  };
-
+    submitHandle(updatedEmployee);
+  }
+};
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -154,15 +150,6 @@ export default function EmployeeForm({ darkMode, setDarkMode,
             margin="dense"
             error={!!errors.employeename}
             helperText={errors.employeename}
-            sx={{
-              input: { color: color.text },
-              label: { color: color.text },
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": { borderColor: color.text },
-                "&:hover fieldset": { borderColor: color.text },
-                "&.Mui-focused fieldset": { borderColor: color.navbar },
-              }
-            }}
           />
 
           <TextField
@@ -175,62 +162,9 @@ export default function EmployeeForm({ darkMode, setDarkMode,
             margin="dense"
             error={!!errors.role}
             helperText={errors.role}
-            sx={{
-              "& .MuiInputLabel-root": {
-                color: color.text
-              },
-              "& .MuiInputLabel-root.Mui-focused": {
-                color: color.navbar
-              },
-              "& .MuiSelect-select": {
-                color: color.text
-              },
-              "& .MuiSvgIcon-root": {
-                color: color.text
-              },
-              "& .MuiOutlinedInput-root": {
-                color: color.text,  // important
-                "& fieldset": { borderColor: color.text },
-                "&:hover fieldset": { borderColor: color.text },
-                "&.Mui-focused fieldset": { borderColor: color.navbar }
-              }
-            }}
           >
-
-
-            <MenuItem
-              value="HR"
-              sx={{
-                backgroundColor: color.background,
-                color: color.text,
-                "&.Mui-selected": {
-                  backgroundColor: color.background,
-                  color: color.text
-                },
-                "&.Mui-selected:hover": {
-                  backgroundColor: color.background
-                }
-              }}
-            >
-              HR
-            </MenuItem>
-
-            <MenuItem
-              value="Employee"
-              sx={{
-                backgroundColor: color.background,
-                color: color.text,
-                "&.Mui-selected": {
-                  backgroundColor: color.background,
-                  color: color.text
-                },
-                "&.Mui-selected:hover": {
-                  backgroundColor: color.background
-                }
-              }}
-            >
-              Employee
-            </MenuItem>
+            <MenuItem value="HR">HR</MenuItem>
+            <MenuItem value="Employee">Employee</MenuItem>
           </TextField>
 
           <TextField
@@ -242,18 +176,7 @@ export default function EmployeeForm({ darkMode, setDarkMode,
             margin="dense"
             error={!!errors.salary}
             helperText={errors.salary}
-            sx={{
-              input: { color: color.text },
-              label: { color: color.text },
-
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": { borderColor: color.text },
-                "&:hover fieldset": { borderColor: color.text },
-                "&.Mui-focused fieldset": { borderColor: color.navbar },
-              }
-            }}
           />
-
 
           <TextField
             label="Address"
@@ -264,16 +187,8 @@ export default function EmployeeForm({ darkMode, setDarkMode,
             margin="dense"
             error={!!errors.address}
             helperText={errors.address}
-            sx={{
-              input: { color: color.text },
-              label: { color: color.text },
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": { borderColor: color.text },
-                "&:hover fieldset": { borderColor: color.text },
-                "&.Mui-focused fieldset": { borderColor: color.navbar },
-              }
-            }}
           />
+
           <TextField
             label="Email"
             name="email"
@@ -283,15 +198,6 @@ export default function EmployeeForm({ darkMode, setDarkMode,
             margin="dense"
             error={!!errors.email}
             helperText={errors.email}
-            sx={{
-              input: { color: color.text },
-              label: { color: color.text },
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": { borderColor: color.text },
-                "&:hover fieldset": { borderColor: color.text },
-                "&.Mui-focused fieldset": { borderColor: color.navbar },
-              }
-            }}
           />
 
           <TextField
@@ -304,16 +210,8 @@ export default function EmployeeForm({ darkMode, setDarkMode,
             margin="dense"
             error={!!errors.password}
             helperText={errors.password}
-            sx={{
-              input: { color: color.text },
-              label: { color: color.text },
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": { borderColor: color.text },
-                "&:hover fieldset": { borderColor: color.text },
-                "&.Mui-focused fieldset": { borderColor: color.navbar },
-              }
-            }}
           />
+
           <Box sx={{ mt: 2 }}>
             <CommonButton
               variant="contained"
@@ -356,18 +254,12 @@ export default function EmployeeForm({ darkMode, setDarkMode,
           )}
 
           <DialogActions>
-            <CommonButton
-              onClick={handleClose}
-              sx={{ backgroundColor: color.background, color: color.text }}
-            >
+            <CommonButton onClick={handleClose}>
               Cancel
             </CommonButton>
 
             {type !== "view" && (
-              <CommonButton
-                type="submit"
-                sx={{ backgroundColor: color.navbar, color: color.headings }}
-              >
+              <CommonButton type="submit">
                 {type === "add" ? "Add Employee" : "Update Employee"}
               </CommonButton>
             )}
