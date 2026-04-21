@@ -14,7 +14,7 @@ import WorkIcon from "@mui/icons-material/Work";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { addLeaveDataActionInitiate } from "../redux/actions/addLeaveAction";
-import { updateLeaveDataActionInitiate } from "../redux/actions/updateLeaveAction";
+
 import { getLeaveDataActionInitiate } from "../redux/actions/getLeaveAction";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -39,7 +39,10 @@ function LeaveForm({ darkMode, setDarkMode }) {
 
   const [leave, setLeave] = useState(initialLeave);
   const [errors, setErrors] = useState({});
-  const [type] = useState("add");
+const [type] = useState("add");  
+if (type === "add") {
+ 
+}
 
   useEffect(() => {
     dispatch(getLeaveDataActionInitiate());
@@ -127,35 +130,7 @@ function LeaveForm({ darkMode, setDarkMode }) {
     }
   };
 
-  const handleImageChange = (e) => {
-    if (!e || !e.target || !e.target.files) return;
-
-    const file = e.target.files[0];
-    if (!file) return;
-
-    if (file.type !== "image/jpeg" && file.type !== "image/png") {
-      toast.error("Only JPG and PNG images are allowed");
-      return;
-    }
-
-    if (file.size > 2 * 1024 * 1024) {
-      toast.error("Image must be less than 2MB");
-      return;
-    }
-
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      handleChange({
-        target: {
-          name: "profileImage",
-          value: reader.result
-        }
-      });
-    };
-
-    reader.readAsDataURL(file);
-  };
+  
 
   return (
     <Box
@@ -237,20 +212,20 @@ function LeaveForm({ darkMode, setDarkMode }) {
               disabled
               sx={{
                 mb: 1,
-                mt: 3,
+                mt: 1,
 
                 "& .MuiInputLabel-root": {
                   color: color.text
                 },
                 "& .MuiInputLabel-root.Mui-disabled": {
-                  color: color.text   // 🔥 label white
+                  color: color.text 
                 },
 
                 "& .MuiInputBase-input": {
                   color: color.text
                 },
                 "& .MuiInputBase-input.Mui-disabled": {
-                  WebkitTextFillColor: color.text // 🔥 important (Chrome fix)
+                  WebkitTextFillColor: color.text 
                 },
 
                 "& .MuiOutlinedInput-root": {
@@ -258,7 +233,7 @@ function LeaveForm({ darkMode, setDarkMode }) {
                     borderColor: color.text
                   },
                   "&.Mui-disabled fieldset": {
-                    borderColor: color.text // 🔥 border white
+                    borderColor: color.text 
                   }
                 }
               }}

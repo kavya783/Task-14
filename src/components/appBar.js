@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 
 import Colors from "../colors";
-import { Theme } from "../GlobalStyles";
+
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import NavBar from "./NavBar";

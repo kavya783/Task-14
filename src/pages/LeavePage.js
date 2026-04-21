@@ -1,4 +1,4 @@
-import { Box, Typography, useMediaQuery } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Colors from "../colors";
 
 import { Theme } from "../GlobalStyles";
@@ -44,13 +44,13 @@ function LeavePage({ darkMode, setDarkMode }) {
     const [employee, setEmployee] = useState(initialEmployee);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
-    const isMobile = useMediaQuery("(max-width:600px)");
+    // const isMobile = useMediaQuery("(max-width:600px)");
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        getAllLeaves();
-    }, []);
-
+   useEffect(() => {
+  getAllLeaves();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, []);
     const getAllLeaves = async () => {
         try {
             setLoading(true);

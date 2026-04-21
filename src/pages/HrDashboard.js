@@ -1,6 +1,5 @@
-import { Box, Typography, useMediaQuery } from "@mui/material";
-// ❌ REMOVE THIS LINE
-// import Color from "../color";
+import { Box, Typography } from "@mui/material";
+
 
 import { Theme } from "../GlobalStyles";
 import CommonButton from "../components/CommonButton";
@@ -47,13 +46,13 @@ function HrDashboard({ darkMode, setDarkMode }) {
   const [employee, setemployee] = useState(initialEmployee);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const isMobile = useMediaQuery("(max-width:600px)");
+  // const isMobile = useMediaQuery("(max-width:600px)");
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    getAllEmployees();
-  }, []);
-
+ useEffect(() => {
+  getAllEmployees();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, []);
   const getAllEmployees = async () => {
     try {
       setLoading(true);

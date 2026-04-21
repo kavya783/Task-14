@@ -64,12 +64,13 @@ export default function AuthenticationForm({ darkMode }) {
 
     try {
 
-      const userCred = await signInWithEmailAndPassword(
-        auth,
-        employee.email,
-        employee.password
-      );
+     const userCred = await signInWithEmailAndPassword(
+  auth,
+  employee.email,
+  employee.password
+);
 
+console.log(userCred.user);
       localStorage.setItem("email", employee.email);
       localStorage.setItem("role", "hr");
 
@@ -93,11 +94,11 @@ export default function AuthenticationForm({ darkMode }) {
         }));
 
         console.log("EMPLOYEES ARRAY:", JSON.stringify(employees, null, 2));
-        const user = employees.find((emp) => {
-          if (emp.email === employee.email) {
-            return bcrypt.compareSync(employee.password, emp.password);
-          }
-        });
+       const user = employees.find(
+  (emp) =>
+    emp.email === employee.email &&
+    bcrypt.compareSync(employee.password, emp.password)
+);
 
         console.log("FOUND USER:", user);
        

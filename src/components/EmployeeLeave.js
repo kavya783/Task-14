@@ -249,7 +249,7 @@ export default function EmployeeLeave({ darkMode, setDarkMode }) {
                                     :color.background,
 
                               color:color.text,
-                              fontSize:Theme.font14Bold,
+                              // fontSize:Theme.font14Bold,
 
                              
                             }}
