@@ -26,7 +26,7 @@ export const updateEmployeeDataActionInitiate = (Employee, id) => {
   return async (dispatch) => {
     dispatch(updateEmployeeDataStart());
     try {
-      const res = await updateEmployeeData(Employee, id);
+       await updateEmployeeData(Employee, id);
       dispatch(updateEmployeeDataSuccess({ ...Employee, id }));
     } catch (error) {
       dispatch(updateEmployeeDataError(error.message));

@@ -26,8 +26,9 @@ export const updateLeaveDataActionInitiate = (Leave, id) => {
   return async (dispatch) => {
     dispatch(updateLeaveDataStart());
     try {
-      const res =await updateLeaveData(Leave, id);
-     dispatch(updateLeaveDataSuccess({ ...Leave, _id: id }));
+      await updateLeaveData(Leave, id);
+
+      dispatch(updateLeaveDataSuccess({ ...Leave, _id: id }));
     } catch (error) {
       dispatch(updateLeaveDataError(error.message));
     }
