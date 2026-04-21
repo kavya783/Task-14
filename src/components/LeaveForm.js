@@ -249,6 +249,9 @@ if (type === "add") {
               error={!!errors.leaveType}
               helperText={errors.leaveType}
               sx={{
+                 mb: 2,
+                mt: 2,
+
                 "& .MuiInputLabel-root": {
                   color: color.text
                 },
@@ -272,6 +275,7 @@ if (type === "add") {
               <MenuItem
                 value="Casual"
                 sx={{
+                  
                   backgroundColor: color.background,
                   color: color.text,
                   "&.Mui-selected": {
@@ -322,6 +326,8 @@ if (type === "add") {
                 error={!!errors.fromDate}
                 helperText={errors.fromDate}
                 sx={{
+                    mb: 2,
+                mt: 2,
                   input: { color: color.text },
                   label: { color: color.text },
 
@@ -343,6 +349,8 @@ if (type === "add") {
                 error={!!errors.toDate}
                 helperText={errors.toDate}
                 sx={{
+                    mb: 2,
+                mt: 2,
                   input: { color: color.text },
                   label: { color: color.text },
 
@@ -367,6 +375,8 @@ if (type === "add") {
               error={!!errors.reason}
               helperText={errors.reason}
               sx={{
+                  mb: 2,
+                mt: 2,
                 input: { color: color.text },
                 label: { color: color.text },
 

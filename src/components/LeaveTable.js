@@ -54,7 +54,7 @@ export default function LeaveTable({ data = [], handleView, page, rowsPerPage, d
                 mb: 2,
                 boxShadow: 3,
                 mt: 3,
-                backgroundColor: color.background  
+                color:color.card
               }}
             >
               <CardContent>
@@ -71,23 +71,23 @@ export default function LeaveTable({ data = [], handleView, page, rowsPerPage, d
                   />
                 </Box>
 
-                <Typography sx={{ color: color.text }}>
+                <Typography sx={{ color: color.card}}>
                   <b>Name:</b> {item.employeename}
                 </Typography>
 
-                <Typography sx={{ color: color.text }}>
+                <Typography sx={{ color: color.card }}>
                   <b>Type:</b> {item.leaveType}
                 </Typography>
 
-                <Typography sx={{ color: color.text }}>
+                <Typography sx={{ color: color.card }}>
                   <b>From:</b> {item.fromDate}
                 </Typography>
 
-                <Typography sx={{ color: color.text }}>
+                <Typography sx={{ color: color.card }}>
                   <b>To:</b> {item.toDate}
                 </Typography>
 
-                <Typography sx={{ color: color.text }}>
+                <Typography sx={{ color: color.card }}>
                   <b>Status:</b>{" "}
                   <span style={{
                     color:
