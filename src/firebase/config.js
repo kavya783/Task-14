@@ -3,12 +3,12 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCM2eCpQAlQ9KD1OpQL3f1yNxNoK0Z5AVU",
-  authDomain: "redux-portal.firebaseapp.com",
-  projectId: "redux-portal",
-  storageBucket: "redux-portal.firebasestorage.app",
-  messagingSenderId: "969163153460",
-  appId: "1:969163153460:web:1c86f2517a477a23b8aa61",
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);
